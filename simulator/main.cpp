@@ -1,18 +1,80 @@
 #include <iostream>
+
 #include "server/OriginServer.h"
+#include "server/EdgeServer.h"
+#include "loadBalancer/LoadBalancer.h"
+
 using namespace std;
+
 int main()
 {
+    // ==========================
+    // Create Origin Server
+    // ==========================
+
     OriginServer origin;
 
-    origin.addFile(File("image1.jpg",1200,"image"));
-    origin.addFile(File("video.mp4",54000,"video"));
-    origin.addFile(File("style.css",40,"css"));
+    origin.addFile(File("A", 10, "Image"));
+    origin.addFile(File("B", 20, "Image"));
+    origin.addFile(File("C", 30, "Image"));
+    origin.addFile(File("D", 40, "Image"));
+    origin.addFile(File("E", 50, "Image"));
 
+    cout << "=========== Origin Server ===========" << endl;
     origin.displayFiles();
-    cout << origin.hasFile("video.mp4") << endl;
-    File f = origin.getFile("style.css");
-    cout << f.name << endl;
+
+    // ==========================
+    // Create Edge Servers
+    // ==========================
+
+    EdgeServer delhi("Delhi", &origin, 3);
+    EdgeServer mumbai("Mumbai", &origin, 3);
+    EdgeServer chennai("Chennai", &origin, 3);
+
+    // ==========================
+    // Create Load Balancer
+    // ==========================
+
+    LoadBalancer lb;
+
+    lb.addServer(&delhi);
+    lb.addServer(&mumbai);
+    lb.addServer(&chennai);
+
+    cout << "\n=========== Sending Requests ===========" << endl;
+
+    lb.requestFile("A");
+    lb.requestFile("B");
+    lb.requestFile("C");
+    lb.requestFile("A");
+    lb.requestFile("D");
+    lb.requestFile("A");
+    lb.requestFile("E");
+    lb.requestFile("B");
+    lb.requestFile("C");
+
+    // ==========================
+    // Display Cache
+    // ==========================
+
+    cout << "\n=========== Delhi Cache ===========" << endl;
+    delhi.displayCache();
+
+    cout << "\n=========== Mumbai Cache ===========" << endl;
+    mumbai.displayCache();
+
+    cout << "\n=========== Chennai Cache ===========" << endl;
+    chennai.displayCache();
+
+    // ==========================
+    // Display Statistics
+    // ==========================
+
+    cout << "\n=========== Statistics ===========" << endl;
+
+    delhi.displayStats();
+    mumbai.displayStats();
+    chennai.displayStats();
 
     return 0;
 }
