@@ -3,6 +3,7 @@
 #include "server/OriginServer.h"
 #include "server/EdgeServer.h"
 #include "loadBalancer/LoadBalancer.h"
+#include "analytics/Analytics.h"
 
 #include "logger/Logger.h"
 using namespace std;
@@ -81,6 +82,14 @@ int main()
     cout << "\n=========== Request Logs ===========" << endl;
 
     logger.displayLogs();
+
+    Analytics analytics(&logger);
+
+   analytics.totalRequests();
+   analytics.cacheHitRatio();
+   analytics.averageResponseTime();
+   analytics.mostRequestedFile();
+   analytics.requestsPerServer();
 
     return 0;
     

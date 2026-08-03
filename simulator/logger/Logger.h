@@ -18,4 +18,5 @@ public:
     void clearLogs();
 
     int totalLogs() const;
+    const std::vector<LogEntry>& getLogs() const;
 };

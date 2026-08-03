@@ -32,3 +32,8 @@ int Logger::totalLogs() const
 {
     return logs.size();
 }
+
+const std::vector<LogEntry>& Logger::getLogs() const
+{
+    return logs;
+}
