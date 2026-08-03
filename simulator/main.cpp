@@ -4,13 +4,14 @@
 #include "server/EdgeServer.h"
 #include "loadBalancer/LoadBalancer.h"
 
+#include "logger/Logger.h"
 using namespace std;
 
 int main()
 {
-    // ==========================
-    // Create Origin Server
-    // ==========================
+    //==========================
+    //Create Origin Server
+    //==========================
 
     OriginServer origin;
 
@@ -26,10 +27,11 @@ int main()
     // ==========================
     // Create Edge Servers
     // ==========================
+    Logger logger;
 
-    EdgeServer delhi("Delhi", &origin, 3);
-    EdgeServer mumbai("Mumbai", &origin, 3);
-    EdgeServer chennai("Chennai", &origin, 3);
+    EdgeServer delhi("Delhi", &origin, 3,&logger);
+    EdgeServer mumbai("Mumbai", &origin, 3,&logger);
+    EdgeServer chennai("Chennai", &origin, 3,&logger);
 
     // ==========================
     // Create Load Balancer
@@ -76,5 +78,10 @@ int main()
     mumbai.displayStats();
     chennai.displayStats();
 
+    cout << "\n=========== Request Logs ===========" << endl;
+
+    logger.displayLogs();
+
     return 0;
+    
 }

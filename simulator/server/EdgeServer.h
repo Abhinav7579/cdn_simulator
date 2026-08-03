@@ -4,11 +4,12 @@
 #include <string>
 #include "OriginServer.h"
 #include "../cache/LRUCache.h"
+#include "../logger/Logger.h"
 
 class EdgeServer
 {
 private:
-
+    Logger* logger;
     std::string serverName;
 
     LRUCache cache;
@@ -20,7 +21,7 @@ private:
 
 public:
 
-    EdgeServer(std::string name, OriginServer* origin, int cacheSize);
+    EdgeServer(std::string name, OriginServer* origin, int cacheSize, Logger* logger);
 
     File requestFile(const std::string& filename);
 

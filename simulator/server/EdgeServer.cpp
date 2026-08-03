@@ -5,12 +5,12 @@ using namespace std;
 
 EdgeServer::EdgeServer(string name,
                        OriginServer* origin,
-                       int cacheSize)
+                       int cacheSize, Logger* logger)
     : cache(cacheSize)
 {
     serverName = name;
     this->origin = origin;
-
+    this->logger = logger;
     cacheHits = 0;
     cacheMisses = 0;
 }
@@ -23,12 +23,33 @@ File EdgeServer::requestFile(const string& filename)
 
         cacheHits++;
 
+        
+        logger->addLog(
+    LogEntry(
+        filename,
+        serverName,
+        true,
+        false,
+        20,
+        "10:30:15"
+    )
+);
         return cache.get(filename);
     }
 
     cout << "\nCache Miss : " << filename << endl;
 
     cacheMisses++;
+    logger->addLog(
+    LogEntry(
+        filename,
+        serverName,
+        false,
+        true,
+        200,
+        "10:30:15"
+    )
+);
 
     File file = origin->getFile(filename);
 
