@@ -30,9 +30,9 @@ int main()
     // ==========================
     Logger logger;
 
-    EdgeServer delhi("Delhi", &origin, 3,&logger);
-    EdgeServer mumbai("Mumbai", &origin, 3,&logger);
-    EdgeServer chennai("Chennai", &origin, 3,&logger);
+    EdgeServer delhi("Delhi Edge", &origin, 3, &logger);
+    EdgeServer chennai("Chennai Edge", &origin, 3, &logger);
+    EdgeServer kolkata("Kolkata Edge", &origin, 3, &logger);
 
     // ==========================
     // Create Load Balancer
@@ -41,20 +41,19 @@ int main()
     LoadBalancer lb;
 
     lb.addServer(&delhi);
-    lb.addServer(&mumbai);
     lb.addServer(&chennai);
+    lb.addServer(&kolkata);
+
+    lb.initializeGeoMap();
+    lb.setRoutingStrategy(GEO_ROUTING);
 
     cout << "\n=========== Sending Requests ===========" << endl;
-
-    lb.requestFile("A");
-    lb.requestFile("B");
-    lb.requestFile("C");
-    lb.requestFile("A");
-    lb.requestFile("D");
-    lb.requestFile("A");
-    lb.requestFile("E");
-    lb.requestFile("B");
-    lb.requestFile("C");
+    delhi.setServerStatus(false);
+    lb.requestFile("A", "Punjab");
+    lb.requestFile("B", "Tamil Nadu");
+    lb.requestFile("C", "Chhattisgarh");
+    lb.requestFile("D", "Delhi");
+    lb.requestFile("E", "Kerala");
 
     // ==========================
     // Display Cache
@@ -63,8 +62,8 @@ int main()
     cout << "\n=========== Delhi Cache ===========" << endl;
     delhi.displayCache();
 
-    cout << "\n=========== Mumbai Cache ===========" << endl;
-    mumbai.displayCache();
+    cout << "\n=========== kokata Cache ===========" << endl;
+    kolkata.displayCache();
 
     cout << "\n=========== Chennai Cache ===========" << endl;
     chennai.displayCache();
@@ -76,7 +75,7 @@ int main()
     cout << "\n=========== Statistics ===========" << endl;
 
     delhi.displayStats();
-    mumbai.displayStats();
+    kolkata.displayStats();
     chennai.displayStats();
 
     cout << "\n=========== Request Logs ===========" << endl;

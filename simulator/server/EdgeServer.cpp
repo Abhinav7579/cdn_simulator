@@ -13,6 +13,7 @@ EdgeServer::EdgeServer(string name,
     this->logger = logger;
     cacheHits = 0;
     cacheMisses = 0;
+    isAlive = true;
 }
 
 File EdgeServer::requestFile(const string& filename)
@@ -74,4 +75,26 @@ void EdgeServer::displayStats() const
     cout << "Cache Hits : " << cacheHits << endl;
 
     cout << "Cache Misses : " << cacheMisses << endl;
+}
+
+
+void EdgeServer::setServerStatus(bool status)
+{
+    isAlive = status;
+}
+
+bool EdgeServer::getServerStatus() const
+{
+    return isAlive;
+}
+string EdgeServer::getServerName() const
+{
+    return serverName;
+}
+
+void EdgeServer::displayStatus() const
+{
+    cout << serverName << " : "
+         << (isAlive ? "UP" : "DOWN")
+         << endl;
 }

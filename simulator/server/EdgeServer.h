@@ -9,6 +9,7 @@
 class EdgeServer
 {
 private:
+    bool isAlive;
     Logger* logger;
     std::string serverName;
 
@@ -28,4 +29,11 @@ public:
     void displayCache() const;
 
     void displayStats() const;
+
+    void setServerStatus(bool status);
+
+    bool getServerStatus() const;
+    string getServerName() const;
+    void displayStatus() const;
+
 };
