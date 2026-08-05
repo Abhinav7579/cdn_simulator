@@ -3,11 +3,13 @@
 #include <vector>
 #include "../models/LogEntry.h"
 
+
 class Logger
 {
 private:
 
     std::vector<LogEntry> logs;
+    
 
 public:
 

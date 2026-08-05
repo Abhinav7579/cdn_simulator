@@ -4,7 +4,7 @@
 #include "server/EdgeServer.h"
 #include "loadBalancer/LoadBalancer.h"
 #include "analytics/Analytics.h"
-
+#include "client/RequestGenerator.h"
 #include "logger/Logger.h"
 using namespace std;
 
@@ -48,12 +48,19 @@ int main()
     lb.setRoutingStrategy(GEO_ROUTING);
 
     cout << "\n=========== Sending Requests ===========" << endl;
-    delhi.setServerStatus(false);
-    lb.requestFile("A", "Punjab");
-    lb.requestFile("B", "Tamil Nadu");
-    lb.requestFile("C", "Chhattisgarh");
-    lb.requestFile("D", "Delhi");
-    lb.requestFile("E", "Kerala");
+    
+   RequestGenerator generator;
+   int totalRequests = 100;
+
+   vector<Request> requests = generator.generateRequests(totalRequests);
+
+   for(const auto& request : requests)
+    {
+     lb.requestFile(
+        request.filename,
+        request.state
+     );
+    }
 
     // ==========================
     // Display Cache
@@ -91,5 +98,6 @@ int main()
    analytics.requestsPerServer();
 
     return 0;
+
     
 }

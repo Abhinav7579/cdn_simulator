@@ -18,6 +18,7 @@ EdgeServer::EdgeServer(string name,
 
 File EdgeServer::requestFile(const string& filename)
 {
+    addRequest(filename);
     if(cache.contains(filename))
     {
         cout << "\nCache Hit : " << filename << endl;
@@ -35,13 +36,19 @@ File EdgeServer::requestFile(const string& filename)
         "10:30:15"
     )
 );
+        completeRequest();
         return cache.get(filename);
     }
 
     cout << "\nCache Miss : " << filename << endl;
 
     cacheMisses++;
-    logger->addLog(
+   
+
+    File file = origin->getFile(filename);
+
+    cache.put(file);
+     logger->addLog(
     LogEntry(
         filename,
         serverName,
@@ -51,14 +58,9 @@ File EdgeServer::requestFile(const string& filename)
         "10:30:15"
     )
 );
-
-    File file = origin->getFile(filename);
-
-    cache.put(file);
-
     cout << "Fetched from Origin Server\n";
     cout << "Stored in Cache\n";
-
+    completeRequest();
     return file;
 }
 void EdgeServer::displayCache() const
@@ -75,6 +77,10 @@ void EdgeServer::displayStats() const
     cout << "Cache Hits : " << cacheHits << endl;
 
     cout << "Cache Misses : " << cacheMisses << endl;
+
+    cout << "Current Load : "
+     << getCurrentLoad()
+     << endl;
 }
 
 
@@ -97,4 +103,20 @@ void EdgeServer::displayStatus() const
     cout << serverName << " : "
          << (isAlive ? "UP" : "DOWN")
          << endl;
+}
+
+void EdgeServer::addRequest(const string& filename)
+{
+    activeRequests.push(filename);
+}
+
+void EdgeServer::completeRequest()
+{
+    if(!activeRequests.empty())
+        activeRequests.pop();
+}
+
+int EdgeServer::getCurrentLoad() const
+{
+    return activeRequests.size();
 }

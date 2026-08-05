@@ -5,11 +5,14 @@ using namespace std;
 
 void Logger::addLog(const LogEntry& log)
 {
+    
+
     logs.push_back(log);
 }
 
 void Logger::displayLogs() const
 {
+   
     cout << "\n================ Request Logs ================\n";
 
     for(const auto& log : logs)

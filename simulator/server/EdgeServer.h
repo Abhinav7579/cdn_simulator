@@ -5,6 +5,8 @@
 #include "OriginServer.h"
 #include "../cache/LRUCache.h"
 #include "../logger/Logger.h"
+#include <queue>
+
 
 class EdgeServer
 {
@@ -19,6 +21,7 @@ private:
 
     int cacheHits;
     int cacheMisses;
+    std::queue<std::string> activeRequests;
 
 public:
 
@@ -35,5 +38,11 @@ public:
     bool getServerStatus() const;
     string getServerName() const;
     void displayStatus() const;
+
+    void addRequest(const std::string& filename);
+
+    void completeRequest();
+
+    int getCurrentLoad() const;
 
 };
