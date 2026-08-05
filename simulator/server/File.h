@@ -7,9 +7,7 @@ public:
     std::string name;
     int size;          // KB
     std::string type;
-
     File() {}
-
     File(std::string n, int s, std::string t)
     {
         name = n;
