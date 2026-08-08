@@ -1,6 +1,7 @@
 #include "Analytics.h"
 #include <iostream>
 #include <iomanip>
+#include "../config/Config.h"
 #include <unordered_map>
 #include <string>
 using namespace std;
@@ -12,14 +13,17 @@ Analytics::Analytics(Logger* logger)
 
 void Analytics::totalRequests() const
 {
+    if(Config::verbose){
     cout << "\nTotal Requests : "
          << getTotalRequests()
          << endl;
+    }
 }
 
 
 void Analytics::cacheHitRatio() const
 {
+    if(Config::verbose){
     cout
         << "\nCache Hit Ratio : "
         << fixed
@@ -27,23 +31,28 @@ void Analytics::cacheHitRatio() const
         << getCacheHitRatio()
         << "%"
         << endl;
+    }
 }
 
 void Analytics::averageResponseTime() const
 {
+    if(Config::verbose){
      cout << "\nAverage Response Time : "
          << fixed << setprecision(2)
          << getAverageResponseTime()
          << " ms" << endl;
+    }
    
 }
 
 
 void Analytics::mostRequestedFile() const
 {
+    if(Config::verbose){
    cout << "\nMost Requested File : "
          << getMostRequestedFile()
          << endl;
+    }
 }
 
 
@@ -53,7 +62,9 @@ void Analytics::requestsPerServer() const
 
     if(logs.empty())
     {
+        if(Config::verbose){
         cout << "No requests found.\n";
+        }
         return;
     }
 
@@ -64,15 +75,19 @@ void Analytics::requestsPerServer() const
         serverRequests[log.serverName]++;
     }
 
+    if(Config::verbose){
     cout << "\nRequests Per Server\n";
     cout << "-------------------------\n";
+    }
 
     for(const auto& server : serverRequests)
     {
+        if(Config::verbose){
         cout << server.first
              << " : "
              << server.second
              << endl;
+        }
     }
 }
 

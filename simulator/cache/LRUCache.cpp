@@ -1,6 +1,6 @@
 #include "LRUCache.h"
 #include <iostream>
-
+#include "../config/Config.h"
 using namespace std;
 
 LRUCache::Node::Node(string filename_, File file_)
@@ -103,7 +103,9 @@ void LRUCache::displayCache() const
 
     while (cur != tail)
     {
+        if(Config::verbose){
         cout << cur->filename << endl;
+        }
         cur = cur->next;
     }
 }

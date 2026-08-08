@@ -1,4 +1,5 @@
 #include "EdgeServer.h"
+#include "../config/Config.h"
 #include <iostream>
 
 using namespace std;
@@ -21,7 +22,9 @@ File EdgeServer::requestFile(const string& filename)
     addRequest(filename);
     if(cache.contains(filename))
     {
+        if(Config::verbose){
         cout << "\nCache Hit : " << filename << endl;
+        }
 
         cacheHits++;
 
@@ -39,8 +42,9 @@ File EdgeServer::requestFile(const string& filename)
         completeRequest();
         return cache.get(filename);
     }
-
+    if(Config::verbose){
     cout << "\nCache Miss : " << filename << endl;
+    }
 
     cacheMisses++;
    
@@ -58,20 +62,25 @@ File EdgeServer::requestFile(const string& filename)
         "10:30:15"
     )
 );
+    if(Config::verbose){
     cout << "Fetched from Origin Server\n";
     cout << "Stored in Cache\n";
+    }
     completeRequest();
     return file;
 }
 void EdgeServer::displayCache() const
 {
+    if(Config::verbose){
     cout << "\nCache of " << serverName << endl;
+    }
 
     cache.displayCache();
 }
 
 void EdgeServer::displayStats() const
 {
+    if(Config::verbose){
     cout << "\nServer : " << serverName << endl;
 
     cout << "Cache Hits : " << cacheHits << endl;
@@ -81,6 +90,7 @@ void EdgeServer::displayStats() const
     cout << "Current Load : "
      << getCurrentLoad()
      << endl;
+    }
 }
 
 
@@ -100,9 +110,11 @@ string EdgeServer::getServerName() const
 
 void EdgeServer::displayStatus() const
 {
+    if(Config::verbose){
     cout << serverName << " : "
          << (isAlive ? "UP" : "DOWN")
          << endl;
+    }
 }
 
 void EdgeServer::addRequest(const string& filename)

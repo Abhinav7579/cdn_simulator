@@ -1,4 +1,5 @@
 #include "OriginServer.h"
+#include "../config/Config.h"
 #include <iostream>
 
 using namespace std;
@@ -30,14 +31,18 @@ File OriginServer::getFile(const string& filename) const
 
 void OriginServer::displayFiles() const
 {
+    if(Config::verbose){
     cout << "\nOrigin Server Files\n";
+    }
 
     for(auto &x : files)
     {
+        if(Config::verbose){
         cout << x.second.name
              << " "
              << x.second.size << "KB "
              << x.second.type << endl;
+        }
     }
 }
 const unordered_map<string, File>& OriginServer::getFiles() const

@@ -1,6 +1,6 @@
 #include "LoadBalancer.h"
 #include <iostream>
-
+#include "../config/Config.h"
 using namespace std;
 
 LoadBalancer::LoadBalancer()
@@ -93,39 +93,50 @@ File LoadBalancer::requestFile(const string& filename,
 
     if(it != geoMap.end())
     {
+        if(Config::verbose){
         cout << "\nGeo Routing : "
              << state
              << " -> Edge Server\n";
+        }
 
         EdgeServer* server = it->second;
         if(server->getServerStatus())
         {
             return server->requestFile(filename);
         }
+        if(Config::verbose){
         cout << server->getServerName()
         << " is DOWN.\n";
         cout << "Trying backup server...\n";
+        }
         EdgeServer* backup = getNextServer();
         if(backup == nullptr)
         {
             throw runtime_error("All edge servers are down.");
         }
+        if(Config::verbose){
         cout<<"redirecting to "<<backup->getServerName()<<endl;
+        }
         return backup->requestFile(filename);
 
 
     }
 
+
+    if(Config::verbose){
     cout << "\nState not found. Using Round Robin.\n";
+    }
 
     return requestFile(filename);
 }
 
 void LoadBalancer::displayServers() const
 {
+    if(Config::verbose){
     cout << "\nTotal Edge Servers : "
          << servers.size()
          << endl;
+    }
 }
 
 const vector<EdgeServer*>& LoadBalancer::getServers() const
