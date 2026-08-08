@@ -1,14 +1,18 @@
 import type { Request, Response } from "express";
-
 import { runSimulator } from "../services/simulatorService.js";
 
-export const runSimulation = (
+export const runSimulation = async (
     req: Request,
     res: Response
 ) => {
+    try {
+        const data = await runSimulator();
+        res.json(data);
+    } catch (err) {
+        console.error(err);
 
-    const result = runSimulator();
-
-    res.json(result);
-
+        res.status(500).json({
+            error: err
+        });
+    }
 };

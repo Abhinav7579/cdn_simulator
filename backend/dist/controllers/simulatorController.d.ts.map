@@ -1,1 +1,1 @@
-{"version":3,"file":"simulatorController.d.ts","sourceRoot":"","sources":["../../src/controllers/simulatorController.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAC,QAAQ,EAAE,MAAM,SAAS,CAAC;AAEhD,eAAO,MAAM,aAAa,QAAS,OAAO,OAAO,QAAQ,SAIxD,CAAC"}
+{"version":3,"file":"simulatorController.d.ts","sourceRoot":"","sources":["../../src/controllers/simulatorController.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAGjD,eAAO,MAAM,aAAa,QACjB,OAAO,OACP,QAAQ,kBAYhB,CAAC"}
