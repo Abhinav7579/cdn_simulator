@@ -120,3 +120,18 @@ int EdgeServer::getCurrentLoad() const
 {
     return activeRequests.size();
 }
+
+int EdgeServer::getCacheHits() const
+{
+    return cacheHits;
+}
+
+int EdgeServer::getCacheMisses() const
+{
+    return cacheMisses;
+}
+
+const LRUCache& EdgeServer::getCache() const
+{
+    return cache;
+}

@@ -21,4 +21,14 @@ public:
     void mostRequestedFile() const;
 
     void requestsPerServer() const;
+    
+
+    //data
+    int getTotalRequests() const;
+    
+    double getCacheHitRatio() const;
+
+    double getAverageResponseTime() const;
+
+    std::string getMostRequestedFile() const;
 };

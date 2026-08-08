@@ -9,6 +9,7 @@ class OriginServer
 private:
 
     std::unordered_map<std::string, File> files;
+    
 
 public:
 
@@ -21,4 +22,6 @@ public:
     File getFile(const std::string& filename) const;
 
     void displayFiles() const;
+
+    const std::unordered_map<std::string, File>& getFiles() const;
 };

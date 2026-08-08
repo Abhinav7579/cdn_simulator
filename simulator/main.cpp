@@ -1,18 +1,30 @@
 #include <iostream>
 
+#include "utils/SimulationExporter.h"
 #include "server/OriginServer.h"
 #include "server/EdgeServer.h"
 #include "loadBalancer/LoadBalancer.h"
 #include "analytics/Analytics.h"
 #include "client/RequestGenerator.h"
 #include "logger/Logger.h"
+
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
-    //==========================
-    //Create Origin Server
-    //==========================
+    bool jsonMode = false;
+
+    if(argc > 1)
+    {
+        if(string(argv[1]) == "--json")
+        {
+            jsonMode = true;
+        }
+    }
+
+    // ==========================
+    // Create Origin Server
+    // ==========================
 
     OriginServer origin;
 
@@ -22,13 +34,15 @@ int main()
     origin.addFile(File("D", 40, "Image"));
     origin.addFile(File("E", 50, "Image"));
 
-    cout << "=========== Origin Server ===========" << endl;
-    origin.displayFiles();
+    // ==========================
+    // Create Logger
+    // ==========================
+
+    Logger logger;
 
     // ==========================
     // Create Edge Servers
     // ==========================
-    Logger logger;
 
     EdgeServer delhi("Delhi Edge", &origin, 3, &logger);
     EdgeServer chennai("Chennai Edge", &origin, 3, &logger);
@@ -45,59 +59,97 @@ int main()
     lb.addServer(&kolkata);
 
     lb.initializeGeoMap();
+
     lb.setRoutingStrategy(GEO_ROUTING);
 
-    cout << "\n=========== Sending Requests ===========" << endl;
-    
-   RequestGenerator generator;
-   int totalRequests = 100;
+    // ==========================
+    // Display Initial State
+    // ==========================
 
-   vector<Request> requests = generator.generateRequests(totalRequests);
-
-   for(const auto& request : requests)
+    if(!jsonMode)
     {
-     lb.requestFile(
-        request.filename,
-        request.state
-     );
+        cout << "=========== Origin Server ===========" << endl;
+        origin.displayFiles();
+
+        cout << "\n=========== Sending Requests ===========" << endl;
     }
 
     // ==========================
-    // Display Cache
+    // Generate Requests
     // ==========================
 
-    cout << "\n=========== Delhi Cache ===========" << endl;
-    delhi.displayCache();
+    RequestGenerator generator;
 
-    cout << "\n=========== kokata Cache ===========" << endl;
-    kolkata.displayCache();
+    int totalRequests = 10;
 
-    cout << "\n=========== Chennai Cache ===========" << endl;
-    chennai.displayCache();
+    vector<Request> requests =
+        generator.generateRequests(totalRequests);
+
+    for(const auto& request : requests)
+    {
+        lb.requestFile(
+            request.filename,
+            request.state
+        );
+    }
 
     // ==========================
-    // Display Statistics
+    // Console Output
     // ==========================
 
-    cout << "\n=========== Statistics ===========" << endl;
+    if(!jsonMode)
+    {
+        cout << "\n=========== Delhi Cache ===========" << endl;
+        delhi.displayCache();
 
-    delhi.displayStats();
-    kolkata.displayStats();
-    chennai.displayStats();
+        cout << "\n=========== Kolkata Cache ===========" << endl;
+        kolkata.displayCache();
 
-    cout << "\n=========== Request Logs ===========" << endl;
+        cout << "\n=========== Chennai Cache ===========" << endl;
+        chennai.displayCache();
 
-    logger.displayLogs();
+        cout << "\n=========== Statistics ===========" << endl;
+
+        delhi.displayStats();
+        kolkata.displayStats();
+        chennai.displayStats();
+
+        cout << "\n=========== Request Logs ===========" << endl;
+
+        logger.displayLogs();
+    }
+
+    // ==========================
+    // Analytics
+    // ==========================
 
     Analytics analytics(&logger);
 
-   analytics.totalRequests();
-   analytics.cacheHitRatio();
-   analytics.averageResponseTime();
-   analytics.mostRequestedFile();
-   analytics.requestsPerServer();
+    // ==========================
+    // Export
+    // ==========================
+
+    if(jsonMode)
+    {
+        SimulationExporter exporter;
+
+        exporter.exportSimulation(
+            origin,
+            lb,
+            analytics,
+            logger
+        );
+    }
+    else
+    {
+        cout << "\n=========== Analytics ===========" << endl;
+
+        analytics.totalRequests();
+        analytics.cacheHitRatio();
+        analytics.averageResponseTime();
+        analytics.mostRequestedFile();
+        analytics.requestsPerServer();
+    }
 
     return 0;
-
-    
 }

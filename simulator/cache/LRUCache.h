@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include "../server/File.h"
-
+#include<vector>
 using namespace std;
 
 class LRUCache
@@ -44,4 +44,6 @@ public:
     void put(const File& file);
 
     void displayCache() const;
+
+    vector<File> getCachedFiles() const;
 };

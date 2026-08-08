@@ -37,4 +37,10 @@ public:
                      const string& state);
 
     void displayServers() const;
+
+    const std::vector<EdgeServer*>& getServers() const;
+
+    RoutingStrategy getRoutingStrategy() const;
+
+    const std::unordered_map<std::string, EdgeServer*>& getGeoMap() const;
 };

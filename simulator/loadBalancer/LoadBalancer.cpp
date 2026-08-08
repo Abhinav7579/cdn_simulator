@@ -127,3 +127,19 @@ void LoadBalancer::displayServers() const
          << servers.size()
          << endl;
 }
+
+const vector<EdgeServer*>& LoadBalancer::getServers() const
+{
+    return servers;
+}
+
+RoutingStrategy LoadBalancer::getRoutingStrategy() const
+{
+    return strategy;
+}
+
+const unordered_map<string, EdgeServer*>&
+LoadBalancer::getGeoMap() const
+{
+    return geoMap;
+}

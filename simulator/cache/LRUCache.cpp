@@ -107,3 +107,18 @@ void LRUCache::displayCache() const
         cur = cur->next;
     }
 }
+
+vector<File> LRUCache::getCachedFiles() const
+{
+    vector<File> files;
+
+    Node* cur = head->next;
+
+    while(cur != tail)
+    {
+        files.push_back(cur->file);
+        cur = cur->next;
+    }
+
+    return files;
+}

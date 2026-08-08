@@ -44,5 +44,11 @@ public:
     void completeRequest();
 
     int getCurrentLoad() const;
+    
+    int getCacheHits() const;
+
+   int getCacheMisses() const;
+
+    const LRUCache& getCache() const;
 
 };

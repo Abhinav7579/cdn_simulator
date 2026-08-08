@@ -40,3 +40,7 @@ void OriginServer::displayFiles() const
              << x.second.type << endl;
     }
 }
+const unordered_map<string, File>& OriginServer::getFiles() const
+{
+    return files;
+}
